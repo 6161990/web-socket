@@ -16,7 +16,7 @@ function onClose() {
 }
 
 function connect() {
-  websocket = new WebSocket("ws://localhost:8080/ws/chats");
+  websocket = new WebSocket("ws://localhost:8080/heartbeat/chats");
   websocket.onmessage = onMessage;
   websocket.onopen = onOpen;
   websocket.onclose = onClose;
