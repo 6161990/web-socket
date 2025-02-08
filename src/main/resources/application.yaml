@@ -1,3 +1,35 @@
 spring:
   application:
     name: can-u-feel-my-heartbeat
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/can_u_feel_my_heartbeat
+    username: chat_service_user
+    password: char_service_user
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 4d4831da8bed451bcca33c43265fdb0c
+            client-secret: AQp9hxiF26HbeMRH1UL2VTEw0UQmMy2U
+            scope:
+              - profile_nickname
+              - account_email
+              - name
+              - gender
+              - birthday
+              - birthyear
+              - phone_number
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            client-name: kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+
