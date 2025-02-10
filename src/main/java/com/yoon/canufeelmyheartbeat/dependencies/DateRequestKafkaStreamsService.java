@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorSupplier;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import static com.yoon.canufeelmyheartbeat.constant.Topics.DATE_REQUEST_TOPIC;
 @RequiredArgsConstructor
 public class DateRequestKafkaStreamsService {
 
-    private final KafkaStreamsConfiguration kafkaStreamsConfig;
+    private final KafkaStreamsConfiguration kafkaStreamsConfiguration;
     private final DateRequestAlarmProcessor dateRequestAlarmProcessor;
 
     /** Kafka Streams의 Processor API를 사용해 Kafka 메시지를 수집, 가공, 발행
@@ -42,7 +43,7 @@ public class DateRequestKafkaStreamsService {
                 sink는 Kafka 토픽에 메시지를 다시 저장할 때 사용하니까!
                 .addSink("date request sink", "date-request-alarm", "date request processor");*/
 
-        KafkaStreams streams = new KafkaStreams(topology, kafkaStreamsConfig.asProperties());
+        KafkaStreams streams = new KafkaStreams(topology, kafkaStreamsConfiguration.asProperties());
         streams.start();
     }
 
