@@ -11,7 +11,7 @@ import java.util.Map;
 @Configuration
 public class KafkaStreamsConfig {
 
-    @Bean(name = "kafkaStreamsConfig")
+    @Bean(name = "kafkaStreamsConfiguration")
     public KafkaStreamsConfiguration kafkaStreamsConfig() {
         Map<String, Object> props = new HashMap<>();
         props.put("application.id", "can-u-feel-my-heartbeat");
@@ -22,7 +22,7 @@ public class KafkaStreamsConfig {
     }
 
     @Bean
-    public StreamsBuilderFactoryBean streamsBuilderFactoryBean(KafkaStreamsConfiguration kafkaStreamsConfig) {
-        return new StreamsBuilderFactoryBean(kafkaStreamsConfig);
+    public StreamsBuilderFactoryBean streamsBuilderFactoryBean(KafkaStreamsConfiguration kafkaStreamsConfiguration) {
+        return new StreamsBuilderFactoryBean(kafkaStreamsConfiguration);
     }
 }
