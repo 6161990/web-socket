@@ -14,6 +14,10 @@ stompClient.onConnect = (frame) => {
     body: JSON.stringify(
         {'message': 'connected'})
   });
+  stompClient.subscribe('/sub/date-request-alarm',
+      (chatMessage) => {
+        showDateRequestAlarm(JSON.parse(chatMessage.body));
+      });
 };
 
 
@@ -35,6 +39,7 @@ function setConnected(connected){
     $("#conversation").hide();
   }
   $("#messages").html("");
+  $("#date-request-alarm").html("");
 }
 
 function connect() {
@@ -56,8 +61,23 @@ function sendMessage() {
   $("#message").val("")
 }
 
+function requestDate() {
+  stompClient.publish({
+    destination: "/pub/date-request",
+    body: JSON.stringify(
+        {'message': $("#message").val()})
+  });
+  $("#message").val("")
+}
+
 function showMessage(chatMessage) {
   $("#messages").append(
+      "<tr><td>" + chatMessage.sender + " : " + chatMessage.message
+      + "</td></tr>");
+}
+
+function showDateRequestAlarm(chatMessage) {
+  $("#date-request-alarm").append(
       "<tr><td>" + chatMessage.sender + " : " + chatMessage.message
       + "</td></tr>");
 }
@@ -67,4 +87,5 @@ $(function () {
   $("#connect").click(() => connect());
   $("#disconnect").click(() => disconnect());
   $("#send").click(() => sendMessage());
+  $("#date-request").click(() => requestDate());
 });

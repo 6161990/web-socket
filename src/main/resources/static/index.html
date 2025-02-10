@@ -14,7 +14,6 @@
 <div id="main-content" class="container">
   <h2>Can U feel my heartbeat ?</h2>
 
-  <!-- 사용자 입력 -->
   <div class="row mb-3">
     <div class="col-md-6 text-end">
       <button id="connect" class="btn btn-primary">Connect</button>
@@ -45,7 +44,38 @@
     </div>
   </div>
 
-  <!-- 메시지 입력 -->
+  <!-- 데이트 신청 메시지 입력 -->
+  <div class="row mb-3">
+    <div class="col-md-12">
+      <div class="input-group">
+        <span class="input-group-text">Request Date!</span>
+        <input type="text" id="date-message" class="form-control" placeholder="Type a message">
+        <input type="text" id="date-target" class="form-control" placeholder="Type he's id">
+        <button id="date-request" class="btn btn-primary">Request</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 채팅 메시지 출력 -->
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Alarm</h4>
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>Date Request!</th>
+        </tr>
+        </thead>
+        <tbody id="date-request-alarm">
+        <!-- 메시지가 동적으로 추가될 부분 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- 메시지 입력 -->
   <div class="row mb-3">
     <div class="col-md-12">
       <div class="input-group">
