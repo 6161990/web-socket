@@ -41,7 +41,14 @@ spring:
             user-name-attribute: id
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${spring.kafka.consumer.bootstrap-servers:localhost:9092}
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      group-id: ${spring.application.name}
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+  testcontainers:
+    dynamic-property-registry-injection: allow
