@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+import static com.yoon.canufeelmyheartbeat.constant.Topics.DATE_REQUEST_TOPIC;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class DateRequestBroadcastor {
     public void broadcast(String userId, Map<String, String> payload) {
         try {
             String message = objectMapper.writeValueAsString(payload);
-            producer.send(new ProducerRecord<>("date-request", userId, message));
+            producer.send(new ProducerRecord<>(DATE_REQUEST_TOPIC, userId, message));
             log.info("publishToKafka 'date-request' {}",message);
         } catch (Exception e) {
             throw e;

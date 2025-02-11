@@ -1,14 +1,12 @@
 package com.yoon.canufeelmyheartbeat.dependencies;
 
-import com.yoon.canufeelmyheartbeat.services.DateRequestAlarmProcessor;
+import com.yoon.canufeelmyheartbeat.services.KafkaStreamsProcessorSupplier;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.processor.Processor;
-import org.apache.kafka.streams.processor.ProcessorSupplier;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,7 @@ import static com.yoon.canufeelmyheartbeat.constant.Topics.DATE_REQUEST_TOPIC;
 public class DateRequestKafkaStreamsService {
 
     private final KafkaStreamsConfiguration kafkaStreamsConfiguration;
-    private final DateRequestAlarmProcessor dateRequestAlarmProcessor;
+    private final KafkaStreamsProcessorSupplier kafkaStreamsProcessorSupplier;
 
     /** Kafka Streams의 Processor API를 사용해 Kafka 메시지를 수집, 가공, 발행
     * Topology? Kafka Streams 애플리케이션의 **데이터 처리 흐름(파이프라인)**을 정의하는 객체
@@ -29,7 +27,8 @@ public class DateRequestKafkaStreamsService {
     public void convertAndSend() {
         StreamsBuilder streamsBuilder = new StreamsBuilder();
         streamsBuilder.stream(DATE_REQUEST_TOPIC)
-                .process((ProcessorSupplier<? super Object, ? super Object>) dateRequestAlarmProcessor);
+                .process(kafkaStreamsProcessorSupplier);
+
 
         Topology topology = streamsBuilder.build();
 
