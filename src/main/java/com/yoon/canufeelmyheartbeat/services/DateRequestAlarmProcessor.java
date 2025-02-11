@@ -9,12 +9,10 @@ import org.apache.kafka.streams.processor.api.ProcessorContext;
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.Record;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
 
 import static com.yoon.canufeelmyheartbeat.constant.Topics.WS_SUB_DATE_REQUEST_ALARM_TOPIC;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class DateRequestAlarmProcessor implements Processor<Object, Object, Object, Object> {
 
