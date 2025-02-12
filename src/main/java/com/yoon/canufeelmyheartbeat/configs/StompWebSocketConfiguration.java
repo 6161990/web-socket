@@ -16,6 +16,7 @@ public class StompWebSocketConfiguration implements WebSocketMessageBrokerConfig
         registry.addEndpoint("/stomp/heartbeat/chats");
     }
 
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/pub");
