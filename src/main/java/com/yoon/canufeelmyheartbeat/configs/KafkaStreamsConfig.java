@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import static com.yoon.canufeelmyheartbeat.constant.Topics.DATE_REQUEST_TOPIC;
+
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class KafkaStreamsConfig {
 
     public void createTopicIfNotExists(AdminClient client) {
         try (AdminClient adminClient = client) {
-            String topicName = "date-request";
+            String topicName = DATE_REQUEST_TOPIC;
             if (!topicExists(adminClient, topicName)) {
                 createTopic(adminClient, topicName, 1, (short) 1);
                 log.info("Topic '{}' created successfully.", topicName);
