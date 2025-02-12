@@ -1,6 +1,5 @@
 package com.yoon.canufeelmyheartbeat.configs;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
@@ -9,9 +8,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
-import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 
 import java.util.Collections;
 import java.util.Properties;
@@ -28,8 +25,8 @@ public class KafkaStreamsConfig {
 
     private final KafkaProperties kafkaProperties;
 
-    @Bean(name = "kafkaStreamsConfiguration")
-    public KafkaStreamsConfiguration kafkaStreamsConfig() {
+    @Bean
+    public KafkaStreamsConfiguration kafkaStreamsConfiguration() {
         Map<String, Object> props = new HashMap<>();
         props.put("application.id", "can-u-feel-my-heartbeat");
         props.put("bootstrap.servers", kafkaProperties.getBootstrapServers());
@@ -79,8 +76,4 @@ public class KafkaStreamsConfig {
         }
     }
 
-    @Bean
-    public StreamsBuilderFactoryBean streamsBuilderFactoryBean(KafkaStreamsConfiguration kafkaStreamsConfiguration) {
-        return new StreamsBuilderFactoryBean(kafkaStreamsConfiguration);
-    }
 }

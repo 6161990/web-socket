@@ -56,7 +56,7 @@ function sendMessage() {
   stompClient.publish({
     destination: "/pub/chats",
     body: JSON.stringify(
-        {'message': $("#message").val()})
+        {'message': $("#message").val(), 'target': $("#date-target").val()})
   });
   $("#message").val("")
 }
@@ -65,9 +65,9 @@ function requestDate() {
   stompClient.publish({
     destination: "/pub/date-request",
     body: JSON.stringify(
-        {'message': $("#message").val()})
+        {'message': $("#date-message").val()})
   });
-  $("#message").val("")
+  $("#date-message").val("")
 }
 
 function showMessage(chatMessage) {
@@ -78,7 +78,7 @@ function showMessage(chatMessage) {
 
 function showDateRequestAlarm(chatMessage) {
   $("#date-request-alarm").append(
-      "<tr><td>" + chatMessage.sender + " : " + chatMessage.message
+      "<tr><td>" + chatMessage.sender + " : " + chatMessage.body
       + "</td></tr>");
 }
 

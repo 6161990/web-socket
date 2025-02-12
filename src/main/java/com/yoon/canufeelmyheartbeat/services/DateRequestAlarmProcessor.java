@@ -1,14 +1,18 @@
 package com.yoon.canufeelmyheartbeat.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.yoon.canufeelmyheartbeat.dtos.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.processor.api.ProcessorContext;
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.Record;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+
+import java.util.Map;
 
 import static com.yoon.canufeelmyheartbeat.constant.Topics.WS_SUB_DATE_REQUEST_ALARM_TOPIC;
 
@@ -31,7 +35,7 @@ public class DateRequestAlarmProcessor implements Processor<Object, Object, Obje
         log.info("Received record: {}", record);
 
         // 기존 record.value()에 sender 추가
-        String updatedValue = addSenderToValue(record.key().toString(), record.value());
+        ChatMessage updatedValue = addSenderToValue(record.key().toString(), record.value());
 
         // 수정된 메시지를 다음 단계로 전달하는 부분. sink 단계가 불필요하므로 생략
 //            context().forward(new Record<>(record.key(), modifiedValue, record.timestamp()));
@@ -45,25 +49,19 @@ public class DateRequestAlarmProcessor implements Processor<Object, Object, Obje
         // 리소스 해제 작업 (필요할 경우)
     }
 
-    private String addSenderToValue(String key, Object value) {
+    private ChatMessage addSenderToValue(String key, Object value) {
         try {
-            JsonNode jsonNode = objectMapper.readTree(value.toString());
+            ChatMessage chatMessage = objectMapper.readValue(value.toString(), ChatMessage.class);
+            chatMessage.setSender(key);
+            return chatMessage;
 
-            // JSON이 Object 형태가 아니라면 무시
-            if (!jsonNode.isObject()) {
-                log.warn("Record value is not a JSON object: {}", value);
-                return value.toString();
-            }
-
-            // 기존 JSON에 sender 필드 추가
-            ObjectNode updatedJson = (ObjectNode) jsonNode;
-            updatedJson.put("sender", key);
-
-            return objectMapper.writeValueAsString(updatedJson);
         } catch (Exception e) {
             log.error("Failed to parse or update JSON value: {}", value, e);
-            return value.toString();
+
+            ChatMessage emptyMessage = new ChatMessage(key, "Invalid message");
+            return emptyMessage;
         }
     }
+
 }
 
