@@ -77,8 +77,9 @@ function showMessage(chatMessage) {
 }
 
 function showDateRequestAlarm(chatMessage) {
+  console.log('showDateRequestAlarm: ' + chatMessage.message + chatMessage.sender);
   $("#date-request-alarm").append(
-      "<tr><td>" + chatMessage.sender + " : " + chatMessage.body
+      "<tr><td>" + chatMessage.sender + " : " + chatMessage.message
       + "</td></tr>");
 }
 

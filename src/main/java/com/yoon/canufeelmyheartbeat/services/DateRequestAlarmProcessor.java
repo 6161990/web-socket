@@ -1,9 +1,7 @@
 package com.yoon.canufeelmyheartbeat.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.yoon.canufeelmyheartbeat.dtos.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +9,6 @@ import org.apache.kafka.streams.processor.api.ProcessorContext;
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.Record;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import java.util.Map;
 
 import static com.yoon.canufeelmyheartbeat.constant.Topics.WS_SUB_DATE_REQUEST_ALARM_TOPIC;
 
@@ -35,7 +31,7 @@ public class DateRequestAlarmProcessor implements Processor<Object, Object, Obje
         log.info("Received record: {}", record);
 
         // 기존 record.value()에 sender 추가
-        ChatMessage updatedValue = addSenderToValue(record.key().toString(), record.value());
+        ChatMessage updatedValue = convertRecord(record.key().toString(), record.value());
 
         // 수정된 메시지를 다음 단계로 전달하는 부분. sink 단계가 불필요하므로 생략
 //            context().forward(new Record<>(record.key(), modifiedValue, record.timestamp()));
@@ -49,11 +45,13 @@ public class DateRequestAlarmProcessor implements Processor<Object, Object, Obje
         // 리소스 해제 작업 (필요할 경우)
     }
 
-    private ChatMessage addSenderToValue(String key, Object value) {
+    private ChatMessage convertRecord(String key, Object value) {
         try {
-            ChatMessage chatMessage = objectMapper.readValue(value.toString(), ChatMessage.class);
-            chatMessage.setSender(key);
-            return chatMessage;
+            String jsonString = value.toString().replace("\\\"", "\"").replaceFirst("^\"", "").replaceFirst("\"$", "");
+
+            JsonNode jsonNode = objectMapper.readTree(jsonString);
+            String message = jsonNode.has("message") ? jsonNode.get("message").asText() : "No message";
+            return new ChatMessage(key, message);
 
         } catch (Exception e) {
             log.error("Failed to parse or update JSON value: {}", value, e);
