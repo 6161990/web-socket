@@ -17,7 +17,7 @@ stompClient.onConnect = (frame) => {
   stompClient.subscribe('/sub/date-request-alarm',
       (chatMessage) => {
         showDateRequestAlarm(JSON.parse(chatMessage.body));
-      });
+  });
 };
 
 

@@ -1,15 +1,24 @@
 const stompClient = new StompJs.Client({
-  brokerURL: 'ws://localhost:8080/stomp/chats'
+  brokerURL: 'ws://localhost:8080/stomp/heartbeat/chats'
 });
 
 stompClient.onConnect = (frame) => {
   setConnected(true);
   showChatrooms();
-  stompClient.subscribe('/sub/chats/news',
+  stompClient.subscribe('/sub/chats',
       (chatMessage) => {
         toggleNewMessageIcon(JSON.parse(chatMessage.body), true);
       });
   console.log('Connected: ' + frame);
+  stompClient.publish({
+    destination: "/pub/chats",
+    body: JSON.stringify(
+        {'message': 'connected'})
+  });
+  stompClient.subscribe('/sub/date-request-alarm',
+      (chatMessage) => {
+        showDateRequestAlarm(JSON.parse(chatMessage.body));
+      });
 };
 
 function toggleNewMessageIcon(chatroomId, toggle) {
@@ -159,7 +168,7 @@ function showMessages(chatroomId) {
 
 function showMessage(chatMessage) {
   $("#messages").append(
-      "<tr><td>" + chatMessage.sender + " : " + chatMessage.message
+      "<tr><td>" + chatMessage.sender + chatMessage.message
       + "</td></tr>");
 }
 
@@ -207,6 +216,22 @@ function leaveChatroom() {
   })
 }
 
+function showDateRequestAlarm(chatMessage) {
+  console.log('showDateRequestAlarm: ' + chatMessage.message + chatMessage.sender);
+  $("#date-request-alarm").append(
+      "<tr><td>" + chatMessage.sender + " : " + chatMessage.message
+      + "</td></tr>");
+}
+
+function requestDate() {
+  stompClient.publish({
+    destination: "/pub/date-request",
+    body: JSON.stringify(
+        {'message': $("#date-message").val()})
+  });
+  $("#date-message").val("")
+}
+
 function exitChatroom(chatroomId) {
   $("#chatroom-id").val("");
   $("#conversation").hide();
@@ -221,4 +246,5 @@ $(function () {
   $("#create").click(() => createChatroom());
   $("#leave").click(() => leaveChatroom());
   $("#send").click(() => sendMessage());
+  $("#date-request").click(() => requestDate());
 });
