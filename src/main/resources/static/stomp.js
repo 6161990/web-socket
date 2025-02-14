@@ -168,7 +168,7 @@ function showMessages(chatroomId) {
 
 function showMessage(chatMessage) {
   $("#messages").append(
-      "<tr><td>" + chatMessage.sender + chatMessage.message
+      "<tr><td>" + chatMessage.sender + ' ' + chatMessage.message
       + "</td></tr>");
 }
 
@@ -227,7 +227,7 @@ function requestDate() {
   stompClient.publish({
     destination: "/pub/date-request",
     body: JSON.stringify(
-        {'message': $("#date-message").val()})
+        {'message': $("#date-message").val(), 'target': $("#date-target").val()})
   });
   $("#date-message").val("")
 }
