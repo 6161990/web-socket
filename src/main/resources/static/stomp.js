@@ -159,6 +159,7 @@ function showMessages(chatroomId) {
         showMessage(data[i]);
       }
     },
+
     error: function (request, status, error) {
       console.log('request: ', request);
       console.log('error: ', error);
