@@ -1,6 +1,14 @@
 spring:
   application:
     name: can-u-feel-my-heartbeat
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 5s
+  session:
+    store-type: redis # Redis를 세션 저장소로 설정
+    timeout: 1800s   # 세션 만료 시간 (30분)
   jpa:
     hibernate:
       ddl-auto: update
