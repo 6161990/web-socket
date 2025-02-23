@@ -1,4 +1,4 @@
-### GET request to example server
+### POST request to example server
 POST http://localhost:8080/consultants
 Content-Type: application/json
 
@@ -13,3 +13,22 @@ Content-Type: application/json
   "birthday": "2000-01-01",
   "role": "ROLE_CONSULTANT"
 }
+
+
+### 로그인 요청 (세션 쿠키 저장)
+POST http://localhost:8080/session-test
+Content-Type:application/json
+
+{
+  "username": "user123"
+}
+
+> {%
+    client.global.set("sessionCookie", response.headers.valueOf("Set-Cookie"));
+%}
+
+### 세션 조회
+GET http://localhost:8080/session/whoami
+Content-Type:application/json
+
+
