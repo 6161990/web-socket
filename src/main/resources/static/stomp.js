@@ -5,9 +5,10 @@ const stompClient = new StompJs.Client({
 stompClient.onConnect = (frame) => {
   setConnected(true);
   showChatrooms();
-  stompClient.subscribe('/sub/chats/news',
+  stompClient.subscribe('/sub/chats/updates',
       (chatMessage) => {
         toggleNewMessageIcon(JSON.parse(chatMessage.body), true);
+        updateMemberCount(JSON.parse(chatMessage.body));
       });
   console.log('Connected: ' + frame);
   stompClient.publish({
@@ -104,7 +105,8 @@ function renderChatrooms(chatrooms) {
         "<tr onclick='joinChatroom(" + chatrooms[i].id + ")'><td>"
         + chatrooms[i].id + "</td><td>" + chatrooms[i].title
         + "<img src='new.png' class='new-icon' id='new_" + chatrooms[i].id + "' style='display: "
-        + getDisplayValue(chatrooms[i].hasNewMessage) + "'/></td><td>"
+        + getDisplayValue(chatrooms[i].hasNewMessage)
+        + "'/></td><td id='memberCount_" + chatrooms[i].id + "'>"
         + chatrooms[i].memberCount + "</td><td>" + chatrooms[i].createdAt
         + "</td></tr>"
     );

@@ -3,6 +3,7 @@ package com.yoon.canufeelmyheartbeat.services;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.yoon.canufeelmyheartbeat.dtos.ChatroomDto;
 import com.yoon.canufeelmyheartbeat.entities.Chatroom;
 import com.yoon.canufeelmyheartbeat.entities.Member;
 import com.yoon.canufeelmyheartbeat.entities.MemberChatroomMapping;
@@ -111,5 +112,10 @@ public class ChatService {
         return messageRepository.findAllByChatroomId(chatroomId);
     }
 
+    @Transactional(readOnly = true)
+    public ChatroomDto getChatroom(Long chatroomId) {
+        Chatroom chatroom = chatroomRepository.findById(chatroomId).get();
 
+        return ChatroomDto.from(chatroom);
+    }
 }

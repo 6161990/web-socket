@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-  brokerURL: 'ws://localhost:8080/stomp/chats'
+  brokerURL: 'ws://localhost:8080/stomp/heartbeat/chats'
 });
 
 stompClient.onConnect = (frame) => {
@@ -103,7 +103,7 @@ function renderChatrooms(page) {
     $("#chatroom-list").append(
         "<tr onclick='joinChatroom(" + chatrooms[i].id + ")'><td>"
         + chatrooms[i].id + "</td><td>" + chatrooms[i].title
-        + "<img src='new.png' id='new_" + chatrooms[i].id + "' style='display: "
+        + "<img src='/new.png' class='new-icon' id='new_" + chatrooms[i].id + "' style='display: "
         + getDisplayValue(chatrooms[i].hasNewMessage)
         + "'/></td><td id='memberCount_" + chatrooms[i].id + "'>"
         + chatrooms[i].memberCount + "</td><td>" + chatrooms[i].createdAt

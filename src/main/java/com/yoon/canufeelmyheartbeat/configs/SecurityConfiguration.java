@@ -31,8 +31,8 @@ public class SecurityConfiguration {
         httpSecurity
                 .securityMatcher("/consultants/**")
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.POST, "/consultants").permitAll()
-                        .anyRequest().hasRole("CONSULTANT"))
+                        .requestMatchers(HttpMethod.POST, "/consultants").permitAll() // test 중 일단 전부 허용
+                        .anyRequest().hasRole("CONSULTANT")) // 일반 유저는 접근 할 수 없게. 앞에 prefix ROLE_ 으로 변경됨
                 .formLogin(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable());
 
