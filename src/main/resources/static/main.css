@@ -103,3 +103,10 @@ td {
   padding: 10px;
   text-align: left;
 }
+
+
+.new-icon {
+  width: 27px;  /* 기존보다 작은 크기로 조정 */
+  height: 19px;
+  margin-left: 5px;  /* 텍스트와 적절한 간격 */
+}

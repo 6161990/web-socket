@@ -10,6 +10,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class StompChatController {
 
     private final ChatService chatService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/chats/{chatroomId}") /* 어떤 경로로 publish 한 메세지를 라우팅할 것인지 매핑.  클라이언트는 /pub/chat 으로 메세지를 발행할거야 */
     @SendTo("/sub/chats/{chatroomId}") /* 클라이언트에게 return 되는 메세지를 보내줄 경로 */
@@ -32,6 +34,8 @@ public class StompChatController {
         CustomOAuth2User customOAuth2User = (CustomOAuth2User) ((OAuth2AuthenticationToken) principal).getPrincipal();
 
         chatService.saveMessage(customOAuth2User.getMember(), chatroomId, payload.get("message"));
+
+        messagingTemplate.convertAndSend("/sub/chats/news", chatroomId);
 
         return new ChatMessage(principal.getName(), payload.get("message"));
     }

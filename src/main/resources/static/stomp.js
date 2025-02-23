@@ -5,7 +5,7 @@ const stompClient = new StompJs.Client({
 stompClient.onConnect = (frame) => {
   setConnected(true);
   showChatrooms();
-  stompClient.subscribe('/sub/chats',
+  stompClient.subscribe('/sub/chats/news',
       (chatMessage) => {
         toggleNewMessageIcon(JSON.parse(chatMessage.body), true);
       });
@@ -103,13 +103,14 @@ function renderChatrooms(chatrooms) {
     $("#chatroom-list").append(
         "<tr onclick='joinChatroom(" + chatrooms[i].id + ")'><td>"
         + chatrooms[i].id + "</td><td>" + chatrooms[i].title
-        + "<img src='new.png' id='new_" + chatrooms[i].id + "' style='display: "
+        + "<img src='new.png' class='new-icon' id='new_" + chatrooms[i].id + "' style='display: "
         + getDisplayValue(chatrooms[i].hasNewMessage) + "'/></td><td>"
         + chatrooms[i].memberCount + "</td><td>" + chatrooms[i].createdAt
         + "</td></tr>"
     );
   }
 }
+
 
 function getDisplayValue(hasNewMessage) {
   if (hasNewMessage) {
@@ -192,7 +193,7 @@ function joinChatroom(chatroomId) {
 }
 
 function getRequestParam(currentChatroomId) {
-  if (currentChatroomId == "") {
+  if (currentChatroomId === "") {
     return "";
   }
 
